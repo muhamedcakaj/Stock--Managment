@@ -23,11 +23,15 @@ export default function StockModal({ barcode, onClose, onSuccess }) {
 
     const fetchExisting = async () => {
       try {
-        const res = await fetch(`http://192.168.0.13:8080/barcode/${barcode}`);
+        const res = await fetch(`http://localhost:8080/stock/barcode/${barcode}`, {
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+          }
+        });
         if (res.ok) {
           const data = await res.json();
           if (data?.name) {
-            setForm(prev => ({ ...prev, name: data.name, price: data.price}));
+            setForm(prev => ({ ...prev, name: data.name, price: data.price,quantity : data.quantity}));
           }
         }
         // If 404 or not found, just leave name empty — user can type it manually
@@ -58,9 +62,12 @@ export default function StockModal({ barcode, onClose, onSuccess }) {
       setLoading(true);
       setError("");
 
-      const res = await fetch("http://192.168.0.13:8080", {
+      const res = await fetch("http://localhost:8080/stock", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        },
         body: JSON.stringify({
           barcode: form.barcode,
           name: form.name,

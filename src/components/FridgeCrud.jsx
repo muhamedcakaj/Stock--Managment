@@ -1,23 +1,32 @@
 import { useState, useEffect, useCallback } from "react";
 
 // ─── Config ────────────────────────────────────────────────────────────────────
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = "http://localhost:8080/stock";
 const LOCATION_ID = 2;
 const LOCATION_LABEL = "Fridge";
 
 // ─── API Layer ─────────────────────────────────────────────────────────────────
 const stockAPI = {
     getAll: async () => {
-        const res = await fetch(`${BASE_URL}/location/${LOCATION_ID}`);
+        const res = await fetch(`${BASE_URL}/location/${LOCATION_ID}`, {
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("token")}`
+            }
+        });
+
         if (!res.ok) throw new Error("Failed to fetch stocks");
         return res.json();
     },
     create: async (payload) => {
         const res = await fetch(BASE_URL, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("token")}`,
+            },
             body: JSON.stringify(payload),
         });
+
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Create failed");
         return data;
@@ -26,15 +35,25 @@ const stockAPI = {
     update: async (payload) => {
         const res = await fetch(BASE_URL, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("token")}`,
+            },
             body: JSON.stringify(payload),
         });
-        const data = await res.json();                        // ← always parse
-        if (!res.ok) throw new Error(data.error || "Update failed"); // ← extract message
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Update failed");
         return data;
     },
     delete: async (id) => {
-        const res = await fetch(`${BASE_URL}/${id}`, { method: "DELETE" });
+        const res = await fetch(`${BASE_URL}/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("token")}`
+            }
+        });
+
         if (!res.ok) throw new Error("Delete failed");
     },
 };
@@ -107,10 +126,10 @@ function StockModal({ initial, onClose, onSubmit }) {
         try {
             await onSubmit({
                 ...(isEdit ? { id: initial.id } : {}),
-                barcode:  form.barcode.trim() || null,
-                name:     form.name.trim(),
+                barcode: form.barcode.trim() || null,
+                name: form.name.trim(),
                 quantity: Number(form.quantity),
-                price:    form.price !== "" ? Number(form.price) : null,
+                price: form.price !== "" ? Number(form.price) : null,
                 location: LOCATION_ID,
             });
             onClose();
@@ -122,10 +141,10 @@ function StockModal({ initial, onClose, onSubmit }) {
     };
 
     const fields = [
-        { label: "Barcode",          field: "barcode",   type: "text",   placeholder: "e.g. 5901234123457" },
-        { label: "Product Name",     field: "name",      type: "text",   placeholder: "e.g. Milk 1L" },
-        { label: "Quantity",         field: "quantity",  type: "number", placeholder: "0" },
-        { label: "Price (optional)", field: "price",     type: "number", placeholder: "0.00" },
+        { label: "Barcode", field: "barcode", type: "text", placeholder: "e.g. 5901234123457" },
+        { label: "Product Name", field: "name", type: "text", placeholder: "e.g. Milk 1L" },
+        { label: "Quantity", field: "quantity", type: "number", placeholder: "0" },
+        { label: "Price (optional)", field: "price", type: "number", placeholder: "0.00" },
     ];
 
     return (
@@ -246,12 +265,12 @@ function StockCard({ stock, onEdit, onDelete }) {
 
 // ─── Main ──────────────────────────────────────────────────────────────────────
 export default function FridgeStock() {
-    const [stocks,  setStocks]  = useState([]);
+    const [stocks, setStocks] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [modal,   setModal]   = useState(null);
+    const [modal, setModal] = useState(null);
     const [confirm, setConfirm] = useState(null);
-    const [toast,   setToast]   = useState(null);
-    const [search,  setSearch]  = useState("");
+    const [toast, setToast] = useState(null);
+    const [search, setSearch] = useState("");
 
     const showToast = (message, type = "success") => setToast({ message, type });
 
@@ -348,8 +367,8 @@ export default function FridgeStock() {
                 <div style={{ background: "#fff", borderBottom: "1px solid #F0EDE8" }}>
                     <div style={{ maxWidth: 640, margin: "0 auto", padding: "0.85rem 1.25rem", display: "flex", gap: "1.5rem" }}>
                         {[
-                            { label: "Produktet",    value: stocks.length,                                     color: "#1C1917" },
-                            { label: "Stok i Ulët",  value: lowCount,                                          color: lowCount > 0 ? "#DC2626" : "#16A34A" },
+                            { label: "Produktet", value: stocks.length, color: "#1C1917" },
+                            { label: "Stok i Ulët", value: lowCount, color: lowCount > 0 ? "#DC2626" : "#16A34A" },
                             { label: "Sasia Totale", value: stocks.reduce((a, s) => a + (s.quantity || 0), 0), color: "#1C1917" },
                         ].map(({ label, value, color }) => (
                             <div key={label}>

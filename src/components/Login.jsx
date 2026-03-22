@@ -1,11 +1,14 @@
 import { useState } from "react"
-import logo from "../assets/warGamers.jpg"
+import logo from "../assets/stock-managment.png"
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from "../Auth/AuthContext"
+
 function Login() {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const { login } = useAuth()
 
   const navigate = useNavigate();
 
@@ -29,9 +32,9 @@ function Login() {
       }
 
       const data = await response.json()
-      localStorage.setItem("token", data.token)
+      console.log(data.token)
+      login(data.token)
       
-      console.log("Login success:", data)
       navigate("/dashboard/create")
     } catch (err) {
       setError(err.message)
@@ -59,7 +62,7 @@ function Login() {
             <img src={logo} alt="Sound Production Logo" className="w-full h-full object-contain"/>
           </div>
           <h1 className="text-2xl font-light text-gray-800 tracking-widest uppercase">
-            THE WAR GAMERS
+            Stock Managment
           </h1>
           <div className="h-px w-12 bg-rose-200 mt-3 mb-2"></div>
           <p className="text-shadow-rose-400 text-sm italic tracking-wide">

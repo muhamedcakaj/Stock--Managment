@@ -1,4 +1,5 @@
 import { Outlet, useNavigate, useLocation } from "react-router-dom"
+import logo from "../assets/stock-managment.png"
 import { useState } from "react"
 
 const DashboardLayout = ({ onLogout }) => {
@@ -17,13 +18,13 @@ const DashboardLayout = ({ onLogout }) => {
       <header className="bg-white border-b border-[#F1E9E4] px-6 py-5 flex justify-between items-center sticky top-0 z-50">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-[#2D2D2D] rounded-lg flex items-center justify-center">
-
+          <img src={logo} alt="Sound Production Logo" className="w-full h-full object-contain"/>
           </div>
           <span className="font-serif text-sm tracking-[0.15em] uppercase font-bold">Menagjimi i Stokut</span>
         </div>
         <button
           onClick={onLogout}
-          className="w-10 h-10 flex items-center justify-center rounded-full bg-[#FDFCFB] border border-[#F1E9E4] text-[#6D6D6D]"
+          className="w-12 h-12 flex items-center justify-center rounded-full bg-white border border-gray-300 text-gray-700  shadow-sm transition duration-200  hover:bg-red-500 hover:text-white hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-1 "
         >
           Dil
         </button>
