@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 
 // ─── Config ────────────────────────────────────────────────────────────────────
-const BASE_URL = "http://localhost:8080/stock";
+const BASE_URL = "https://stockmanagment-production.up.railway.app/stock";
 const LOCATION_ID = 2;
 const LOCATION_LABEL = "Fridge";
 
