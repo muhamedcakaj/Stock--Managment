@@ -6,7 +6,6 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   const { token, getUser } = useAuth()
 
   if (!token) return <Navigate to="/" replace />
-console.log("User info from token:", getUser()) // Debugging line to check token parsing
   if (allowedRoles) {
     const user = getUser()
     if (!user || user.role !== 1) {
