@@ -19,7 +19,7 @@ function Login() {
     setLoading(true)
 
     try {
-      const response = await fetch("https://stockmanagment-production.up.railway.app/login", {
+      const response = await fetch("https://stockmanagment-octm.onrender.com/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

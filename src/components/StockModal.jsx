@@ -23,7 +23,7 @@ export default function StockModal({ barcode, onClose, onSuccess }) {
 
     const fetchExisting = async () => {
       try {
-        const res = await fetch(`https://stockmanagment-production.up.railway.app/stock/barcode/${barcode}`, {
+        const res = await fetch(`https://stockmanagment-octm.onrender.com/stock/barcode/${barcode}`, {
           headers: {
             "Authorization": `Bearer ${localStorage.getItem("token")}`
           }
@@ -62,7 +62,7 @@ export default function StockModal({ barcode, onClose, onSuccess }) {
       setLoading(true);
       setError("");
 
-      const res = await fetch("https://stockmanagment-production.up.railway.app/stock", {
+      const res = await fetch("https://stockmanagment-octm.onrender.com/stock", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
