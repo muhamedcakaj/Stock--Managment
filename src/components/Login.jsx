@@ -32,7 +32,6 @@ function Login() {
       }
 
       const data = await response.json()
-      console.log(data.token)
       login(data.token)
       
       navigate("/dashboard/create")

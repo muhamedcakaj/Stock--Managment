@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 
 // ─── Config ────────────────────────────────────────────────────────────────────
-const BASE_URL = "https://stockmanagment-octm.onrender.com";
+const BASE_URL = "https://stockmanagment-octm.onrender.com/stock";
 const LOCATION_ID = 2;
 const LOCATION_LABEL = "Fridge";
 
