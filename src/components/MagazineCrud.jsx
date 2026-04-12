@@ -310,7 +310,11 @@ export default function MagazineStock() {
     }
   }, []);
 
-  useEffect(() => { fetchStocks(); }, [fetchStocks]);
+  useEffect(() => {
+  fetchStocks();
+  const interval = setInterval(fetchStocks, 5 * 60 * 1000);
+  return () => clearInterval(interval);
+}, [fetchStocks]);
 
   const handleCreate = async (payload) => {
     await stockAPI.create(payload);
